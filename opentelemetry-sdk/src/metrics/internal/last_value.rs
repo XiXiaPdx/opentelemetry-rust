@@ -47,7 +47,7 @@ impl<T: Number> LastValue<T> {
     pub(crate) fn new() -> Self {
         LastValue {
             value_map: ValueMap::new(()),
-            start: Mutex::new(SystemTime::now()),
+            start: Mutex::new(opentelemetry::time::now()),
         }
     }
 
@@ -57,7 +57,7 @@ impl<T: Number> LastValue<T> {
     }
 
     pub(crate) fn compute_aggregation_delta(&self, dest: &mut Vec<DataPoint<T>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
         let prev_start = self
             .start
             .lock()
@@ -74,7 +74,7 @@ impl<T: Number> LastValue<T> {
     }
 
     pub(crate) fn compute_aggregation_cumulative(&self, dest: &mut Vec<DataPoint<T>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
         let prev_start = self.start.lock().map(|start| *start).unwrap_or(t);
         self.value_map
             .collect_readonly(dest, |attributes, aggr| DataPoint {

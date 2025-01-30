@@ -370,7 +370,7 @@ impl<T: Number> ExpoHistogram<T> {
             }),
             record_sum,
             record_min_max,
-            start: Mutex::new(SystemTime::now()),
+            start: Mutex::new(opentelemetry::time::now()),
         }
     }
 
@@ -389,7 +389,7 @@ impl<T: Number> ExpoHistogram<T> {
         &self,
         dest: Option<&mut dyn Aggregation>,
     ) -> (usize, Option<Box<dyn Aggregation>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
 
         let h = dest.and_then(|d| d.as_mut().downcast_mut::<data::ExponentialHistogram<T>>());
         let mut new_agg = if h.is_none() {
@@ -450,7 +450,7 @@ impl<T: Number> ExpoHistogram<T> {
         &self,
         dest: Option<&mut dyn Aggregation>,
     ) -> (usize, Option<Box<dyn Aggregation>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
 
         let h = dest.and_then(|d| d.as_mut().downcast_mut::<data::ExponentialHistogram<T>>());
         let mut new_agg = if h.is_none() {
@@ -468,7 +468,7 @@ impl<T: Number> ExpoHistogram<T> {
             .start
             .lock()
             .map(|s| *s)
-            .unwrap_or_else(|_| SystemTime::now());
+            .unwrap_or_else(|_| opentelemetry::time::now());
 
         self.value_map
             .collect_readonly(&mut h.data_points, |attributes, attr| {

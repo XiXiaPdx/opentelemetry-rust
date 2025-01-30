@@ -300,7 +300,7 @@ impl opentelemetry::logs::Logger for Logger {
             }
         }
         if record.observed_timestamp.is_none() {
-            record.observed_timestamp = Some(SystemTime::now());
+            record.observed_timestamp = Some(opentelemetry::time::now());
         }
 
         for p in processors {

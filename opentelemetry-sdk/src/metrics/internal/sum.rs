@@ -58,7 +58,7 @@ impl<T: Number> Sum<T> {
         Sum {
             value_map: ValueMap::new(()),
             monotonic,
-            start: Mutex::new(SystemTime::now()),
+            start: Mutex::new(opentelemetry::time::now()),
         }
     }
 
@@ -71,7 +71,8 @@ impl<T: Number> Sum<T> {
         &self,
         dest: Option<&mut dyn Aggregation>,
     ) -> (usize, Option<Box<dyn Aggregation>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
+
 
         let s_data = dest.and_then(|d| d.as_mut().downcast_mut::<data::Sum<T>>());
         let mut new_agg = if s_data.is_none() {
@@ -111,7 +112,7 @@ impl<T: Number> Sum<T> {
         &self,
         dest: Option<&mut dyn Aggregation>,
     ) -> (usize, Option<Box<dyn Aggregation>>) {
-        let t = SystemTime::now();
+        let t = opentelemetry::time::now();
 
         let s_data = dest.and_then(|d| d.as_mut().downcast_mut::<data::Sum<T>>());
         let mut new_agg = if s_data.is_none() {

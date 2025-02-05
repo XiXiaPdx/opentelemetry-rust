@@ -89,7 +89,7 @@ impl<T: Number> Histogram<T> {
             bounds,
             record_min_max,
             record_sum,
-            start: Mutex::new(SystemTime::now()),
+            start: Mutex::new(opentelemetry::time::now()),
         }
     }
 
